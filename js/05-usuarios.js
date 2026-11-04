@@ -11,15 +11,39 @@ async function loadUsersTab(){
  $('#users-planner-name').textContent=p.name;
  $('#users-kind').textContent=p.kind==='marista'?'Marista':'Genérico';
  $('#invite-role').innerHTML=roleOptions('leitor');
+ document.querySelector('label[for="invite-email"]').textContent=S.isAppAdmin?'Convidar e-mail que ainda não tem conta':'Dar acesso por e-mail';
  $('#delete-planner').classList.toggle('hidden',p.kind!=='generico');
  $('#users-overview').classList.toggle('hidden',!S.isAppAdmin);
  renderOverview();
  const box=$('#members-list');box.innerHTML='<p class="muted small">Carregando...</p>';
  const pid=p.planner_id;
+ if(S.isAppAdmin){
+  const [u,m]=await Promise.all([S.sb.rpc('sp_all_users',{p_planner:pid}),S.sb.rpc('sp_members',{p_planner:pid})]);
+  if(!S.planner||S.planner.planner_id!==pid)return;
+  const err=u.error||m.error;
+  if(err){box.innerHTML='<p class="muted small">Não foi possível carregar: '+esc(friendlyError(err))+'</p>';return}
+  renderAllUsers(u.data||[],(m.data||[]).filter(x=>x.r_pending));
+  return;
+ }
  const {data,error}=await S.sb.rpc('sp_members',{p_planner:pid});
  if(!S.planner||S.planner.planner_id!==pid)return;
  if(error){box.innerHTML='<p class="muted small">Não foi possível carregar: '+esc(friendlyError(error))+'</p>';return}
  renderMembers(data||[]);
+}
+
+/* Administrador geral: todos os usuários cadastrados, cada um com a permissão neste planner */
+function renderAllUsers(users,pending){
+ const rank=u=>u.r_is_admin?0:(u.r_role?1:2);
+ users=users.slice().sort((a,b)=>rank(a)-rank(b)||String(a.r_email).localeCompare(b.r_email));
+ const semAcesso='<option value="">Sem acesso</option>';
+ const rows=users.map(u=>{
+  if(u.r_is_admin)return `<div class="member-row"><div class="member-info"><b>${esc(u.r_email)}</b><small>Administrador geral · acesso total</small></div></div>`;
+  const st=(u.r_is_owner?'Dono · ':'')+(u.r_role?(u.r_active?'Acesso ativo':'Acesso pausado'):'Sem acesso');
+  const pause=u.r_role?`<button class="secondary" data-act="${u.r_active?'pause':'resume'}" data-user="${esc(u.r_user_id)}" data-role="${esc(u.r_role)}">${u.r_active?'Pausar':'Reativar'}</button>`:'';
+  return `<div class="member-row${u.r_role&&!u.r_active?' paused':''}"><div class="member-info"><b>${esc(u.r_email)}</b><small>${st}</small></div>
+  <select data-act="set-role" data-user="${esc(u.r_user_id)}" data-email="${esc(u.r_email)}" aria-label="Permissão de ${esc(u.r_email)}">${semAcesso.replace('<option value="">',u.r_role?'<option value="">':'<option value="" selected>')}${roleOptions(u.r_role)}</select>${pause}</div>`}).join('');
+ const inv=pending.length?'<h3 style="margin:14px 0 4px;font-size:14px">Convites pendentes</h3>'+pending.map(m=>`<div class="member-row"><div class="member-info"><b>${esc(m.r_email)}</b><small>Convite pendente · ${esc(ROLE_LABEL[m.r_role]||m.r_role)}</small></div><button class="secondary" data-act="del-invite" data-invite="${esc(m.r_invite_id)}">Cancelar convite</button></div>`).join(''):'';
+ $('#members-list').innerHTML='<h3 style="margin:0 0 4px;font-size:14px">Usuários cadastrados</h3><p class="small muted" style="margin:0 0 6px">Escolha a permissão de cada pessoa neste planner. "Sem acesso" remove o acesso.</p>'+(rows||'<p class="muted small">Nenhum usuário cadastrado.</p>')+inv;
 }
 
 function renderMembers(list){
@@ -54,8 +78,15 @@ function onMembersClick(e){
  if(act==='del-invite')return usersRpc('sp_remove_invite',{p_invite:b.dataset.invite},'Convite cancelado.');
 }
 function onMembersChange(e){
- const s=e.target.closest('select[data-act="role"]');if(!s||!canManage())return;
- usersRpc('sp_update_member',{p_planner:S.planner.planner_id,p_user:s.dataset.user,p_role:s.value,p_active:true},'Permissão atualizada.');
+ if(!canManage())return;
+ const pid=S.planner.planner_id;
+ const sr=e.target.closest('select[data-act="set-role"]');
+ if(sr){
+  if(sr.value==='')return usersRpc('sp_remove_member',{p_planner:pid,p_user:sr.dataset.user},'Acesso removido.');
+  return usersRpc('sp_grant',{p_planner:pid,p_email:sr.dataset.email,p_role:sr.value},'Permissão atualizada.');
+ }
+ const s=e.target.closest('select[data-act="role"]');if(!s)return;
+ usersRpc('sp_update_member',{p_planner:pid,p_user:s.dataset.user,p_role:s.value,p_active:true},'Permissão atualizada.');
 }
 
 async function inviteUser(e){

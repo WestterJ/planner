@@ -1,0 +1,17 @@
+Planner Escolar Familiar v2.1.0 — escolher usuários em vez de digitar o e-mail
+
+O que mudou
+- Aba Usuários (administrador geral): lista todos os usuários cadastrados. Em cada um, escolha Sem acesso, Leitor ou Editor para o planner aberto. "Sem acesso" remove. Também dá para Pausar/Reativar.
+- O campo de e-mail continua, agora para convidar quem ainda não tem conta (vira convite pendente).
+- Quem administra um planner genérico (não o administrador geral) continua usando o e-mail: a lista de todos os usuários do sistema só aparece para o administrador geral, por privacidade.
+
+Banco de dados
+- A função sp_all_users já foi aplicada no Supabase (registro em schema_v2_1.sql). Não precisa rodar nada.
+
+Como publicar
+- Suba para o GitHub: js/00-config.js, js/05-usuarios.js, sw.js, ARQUITETURA.md, LEIA-ME-v2.1.0.txt, schema_v2_1.sql.
+- Abra o app, Ctrl+Shift+R, e confira "APP v2.1.0" no topo. Se não mudar, é cache (veja o aviso do service worker).
+
+Como testar
+1. Usuários > deve listar você (administrador geral), wconcursos.gyn e sararosasilva5.
+2. Mude um usuário para Leitor: ele passa a ver o Marista só para leitura. Volte para Sem acesso e ele deixa de ver.

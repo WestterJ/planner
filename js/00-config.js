@@ -1,6 +1,6 @@
 'use strict';
 /* Planner Escolar Familiar — configuração e versão. Ver ARQUITETURA.md */
-const APP_VERSION='v2.0.0';
+const APP_VERSION='v2.1.0';
 const PDF_WORKER_URL='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc=PDF_WORKER_URL;
 const cfg=window.NUTRI_SUPABASE_CONFIG||window.SUPABASE_CONFIG||{};

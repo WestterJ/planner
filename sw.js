@@ -1,4 +1,4 @@
-const C='planner-escolar-v2.0.0';
+const C='planner-escolar-v2.1.0';
 const F=['./','./index.html','./css/estilos.css','./js/00-config.js','./js/01-base.js','./js/02-planners.js','./js/03-registros.js','./js/04-importar.js','./js/05-usuarios.js','./js/06-auth.js','./js/07-iniciar.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(F)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
