@@ -7,129 +7,84 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#68738a;--line:#e5e9f2;--accent:#4f46e5;--soft:#eef2ff;--green:#0f9f6e;--red:#dc4c64}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:650;background:var(--accent);color:#fff}button.secondary{background:#eef0f7;color:#283149}button.danger{background:#fff0f2;color:#b4233d}button:disabled{opacity:.55;cursor:wait}.hidden{display:none!important}.wrap{max-width:1180px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}.brand{display:flex;gap:12px;align-items:center}.logo{font-size:27px;background:var(--soft);border-radius:14px;padding:10px}.brand h1{font-size:22px;margin:0}.brand p{margin:2px 0;color:var(--muted);font-size:13px}.badge{font-size:12px;background:#e7f8ef;color:#08784f;padding:5px 9px;border-radius:20px}.version-badge{font-size:12px;font-weight:800;background:#172033;color:#fff;padding:6px 10px;border-radius:9px;letter-spacing:.25px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:0 5px 20px #25304a08}.auth{max-width:440px;margin:7vh auto}.auth h2{margin-top:0}.field{display:flex;flex-direction:column;gap:5px;margin:10px 0}.field label{font-size:13px;font-weight:700;color:#47516a}.field input,.field select,.field textarea{width:100%;border:1px solid #d8deea;border-radius:9px;padding:10px;background:#fff;color:var(--ink)}.field textarea{min-height:90px;resize:vertical}.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.muted{color:var(--muted)}.small{font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(290px,1fr);gap:16px}.weekhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.weekhead h2{margin:0;font-size:18px}.weekgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin-top:14px}.day{min-height:150px;border:1px solid var(--line);border-radius:12px;padding:8px;background:#fff;cursor:pointer}.day.today{border:2px solid var(--accent);background:#fafaff}.day.selected{box-shadow:0 0 0 2px #c7d2fe}.dayname{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:750}.daynum{font-size:19px;font-weight:800;margin:3px 0 8px}.event{font-size:11px;padding:5px 6px;border-radius:7px;background:#eef2ff;border-left:3px solid #6366f1;margin:4px 0;overflow-wrap:anywhere}.event.red{background:#fff0f2;border-color:#e35b70}.event.green{background:#e8f9f1;border-color:#19a974}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px}.stat strong{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}.item{padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.itemtop{display:flex;justify-content:space-between;gap:8px;align-items:start}.item h3{margin:0;font-size:15px}.subject{font-size:11px;font-weight:750;color:#4f46e5;background:#eef2ff;border-radius:6px;padding:3px 6px;display:inline-block;margin:5px 0}.modalback{position:fixed;inset:0;background:#121a2c80;display:flex;align-items:center;justify-content:center;padding:14px;z-index:5}.modal{width:min(680px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;padding:20px}.modal h2{margin-top:0}.notice{padding:10px 12px;border-radius:10px;background:#f1f5ff;color:#34426b;margin:10px 0}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:12px 18px;border-radius:12px;z-index:20;max-width:90%;box-shadow:0 8px 30px #0002}.footer{margin-top:20px;text-align:center;color:var(--muted);font-size:12px}.pill{border-radius:99px;padding:4px 8px;font-size:11px;background:#f0f2f7;color:#505a70}.importbox{border:1px dashed #b8c3dc;border-radius:12px;padding:14px;background:#fafbff}.importbox input[type=file]{max-width:100%}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.weekgrid{grid-template-columns:repeat(7,minmax(90px,1fr));overflow-x:auto}.weekpanel{overflow-x:auto}.day{min-height:125px}.wrap{padding:12px}.stats{gap:6px}.stat{padding:9px}.stat strong{font-size:19px}}@media(max-width:480px){.row{grid-template-columns:1fr}.brand h1{font-size:19px}}
-
-/* Design refresh v1.0.4 */
-:root{
- --bg:#f3f6fc;--card:#ffffff;--ink:#182238;--muted:#64718a;--line:#e1e7f1;
- --accent:#4f46e5;--soft:#eef2ff;--green:#0f9f6e;--red:#dc4c64;
- --shadow:0 10px 28px rgba(31,45,78,.07);
-}
-body{font-size:16px;line-height:1.6;background:radial-gradient(ellipse at top left,#eef2ff 0,transparent 38%),var(--bg)}
-.wrap{max-width:1440px;padding:24px}
-.top{padding:18px 20px;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);align-items:center}
-.brand{min-width:260px}.logo{font-size:30px;border-radius:16px;padding:12px;background:linear-gradient(135deg,#eef2ff,#e0e7ff)}
-.brand h1{font-size:clamp(21px,2vw,27px);font-weight:800;letter-spacing:-.6px}
-.brand p{font-size:14px;line-height:1.45}
-.header-tools{display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.account-tools{display:flex;flex-direction:column;align-items:flex-end;gap:7px;min-width:150px}
-.account-email{font-size:13px;max-width:260px;overflow-wrap:anywhere;text-align:right}
-.account-bottom{display:flex;align-items:center;justify-content:flex-end;gap:8px}
-.version-badge{font-size:12px;background:#202b45;color:#fff;border-radius:999px;padding:6px 11px;letter-spacing:.35px}
-.card{border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
-.stats{gap:14px}.stat{border-radius:17px;padding:17px;background:linear-gradient(145deg,#fff,#fafbff);box-shadow:0 4px 14px rgba(31,45,78,.035)}
-.stat strong{font-size:28px;letter-spacing:-.5px}.stat span{font-size:13px;line-height:1.45}
-.layout{gap:18px}
-.weekhead h2{font-size:20px;font-weight:800;letter-spacing:-.3px}
-.weekgrid{gap:8px}.day{min-height:160px;border-radius:14px;padding:10px;border-color:#e3e8f2;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
-.day:hover{transform:translateY(-2px);box-shadow:0 7px 16px rgba(31,45,78,.08)}
-.dayname{font-size:12px;letter-spacing:.4px}.daynum{font-size:21px}
-.event{font-size:13px;line-height:1.4;padding:7px 8px;border-radius:9px;margin:5px 0;font-weight:600}
-.item{padding:17px 0;border-bottom:1px solid #e8edf5}
-.itemtop{align-items:flex-start}.item h3{font-size:17px;line-height:1.4;font-weight:800;letter-spacing:-.15px}
-.subject{font-size:12px;margin:7px 4px 3px 0;padding:4px 8px;border-radius:8px}
-.pill{font-size:12px;padding:4px 9px}
-.item-meta{font-size:13px;color:var(--muted);margin-top:5px}
-.item-detail{font-size:15px;line-height:1.7;color:#34415b;margin:11px 0 0;overflow-wrap:anywhere}
-.item-detail b{color:#202b45}
-.plan-detail{font-size:15px;color:#34415b;background:#f7f8ff;border-left:3px solid #818cf8;border-radius:0 10px 10px 0;padding:10px 12px}
-button{border-radius:12px;padding:11px 15px;transition:transform .12s ease,filter .12s ease,box-shadow .12s ease}
-button:hover{filter:brightness(.98);box-shadow:0 4px 10px rgba(31,45,78,.1)}
-button:active{transform:translateY(1px)}
-button.secondary{background:#eef1f8;color:#283149}
-.field label{font-size:14px}.field input,.field select,.field textarea{font-size:16px;border-radius:11px;padding:12px;border-color:#dbe2ef}
-.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid #c7d2fe;border-color:#818cf8}
-.modal{border-radius:22px;padding:24px;box-shadow:0 25px 80px rgba(14,24,48,.25)}
-.importbox{border-color:#c7d2fe;border-radius:15px;background:#f8f9ff;padding:16px}
-.notice{border-radius:12px;font-size:14px;line-height:1.55}
-.footer{font-size:13px}
-#filter-subject{font:inherit;max-width:100%;background:#fff}
-@media(max-width:850px){
- .wrap{padding:13px}.top{padding:15px;border-radius:17px}.header-tools{width:100%;justify-content:space-between}
- .account-tools{align-items:flex-start}.account-email{text-align:left}
- .card{padding:16px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:23px}
- .weekgrid{grid-template-columns:repeat(7,minmax(105px,1fr))}.day{min-height:140px}
- .item h3{font-size:16px}.item-detail,.plan-detail{font-size:15px}
-}
-@media(max-width:480px){
- .wrap{padding:9px}.top{gap:12px}.brand{gap:10px;min-width:0}.brand h1{font-size:20px}.brand p{font-size:13px}
- .header-tools{gap:9px;align-items:flex-start}.account-tools{min-width:0;flex:1}
- .account-email{max-width:100%;font-size:12px}.account-bottom{flex-wrap:wrap;justify-content:flex-start}
- .badge{font-size:11px}.version-badge{font-size:11px}
- .card{padding:14px;border-radius:16px}.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
- .stat{padding:10px 8px}.stat strong{font-size:20px}.stat span{font-size:11px}
- .weekhead h2{font-size:18px}.weekhead{align-items:flex-start}
- .weekgrid{grid-template-columns:repeat(7,minmax(100px,1fr))}
- .itemtop{gap:6px}.edit-button{padding:8px 10px;font-size:13px}
- .item-detail,.plan-detail{font-size:15px;line-height:1.65}
- .row{grid-template-columns:1fr}.modal{padding:17px}
-}
-
-
-.tabs{display:flex;gap:6px;margin:0 0 16px;overflow-x:auto;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}.tab{background:#fff;color:#283149;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:700;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.event{background:hsl(var(--h,240) 85% 94%);border-left:4px solid hsl(var(--h,240) 55% 48%);color:hsl(var(--h,240) 55% 26%);cursor:pointer}.subject[style]{background:hsl(var(--h) 85% 94%);color:hsl(var(--h) 55% 30%)}
-.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.quick button{padding:7px 11px;font-size:13px}.late{color:#b4233d;font-weight:700}.day:focus-visible{outline:3px solid #a5b4fc}
-@media(max-width:850px){.weekgrid{display:flex;flex-direction:column;overflow:visible}.day{display:flex;align-items:center;gap:10px;min-height:0;padding:10px}.dayname{width:36px}.daynum{margin:0;width:28px}.dayev{display:flex;flex-wrap:wrap;gap:4px}.day .event{margin:0}}
-</style>
+<link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
 <div class="wrap">
 <header class="top">
  <div class="brand"><div class="logo">📚</div><div><h1>Planner Escolar Familiar</h1><p>Provas, conteúdos e rotina de estudos em um só lugar</p></div></div>
- <div class="header-tools"><span class="badge">☁️ Dados compartilhados</span><div class="account-tools"><span id="user-label" class="muted account-email"></span><div class="account-bottom"><span class="version-badge" id="version-top">APP v1.1.0</span><button id="logout" class="secondary hidden">Sair</button></div></div></div>
+ <div class="header-tools"><span class="badge">☁️ Dados compartilhados</span><div class="account-tools"><span id="user-label" class="muted account-email"></span><div class="account-bottom"><span class="version-badge" id="version-top">APP</span><button id="logout" class="secondary hidden">Sair</button></div></div></div>
 </header>
 <section id="auth-view" class="card auth">
- <h2>Entrar no planner</h2><p class="muted">Use a conta familiar. Os registros ficam compartilhados entre os usuários autorizados do projeto.</p>
+ <h2>Entrar no planner</h2><p class="muted">Entre com sua conta. Você só vê os planners aos quais o administrador der acesso ou que você mesmo criar.</p>
  <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@exemplo.com"></div>
  <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" placeholder="Mínimo de 6 caracteres"></div>
  <div class="actions"><button id="login">Entrar</button><button id="signup" class="secondary">Criar conta</button><button id="forgot" class="secondary">Esqueci a senha</button></div>
  <div id="auth-msg" class="notice small">Se a confirmação por e-mail estiver ativada no Supabase, confirme o cadastro antes de entrar.</div>
 </section>
 <main id="app-view" class="hidden">
- <nav class="tabs" id="tabs"><button class="tab active" data-tab="home">🏠 Início</button><button class="tab" data-tab="records">📋 Registros</button><button class="tab" data-tab="import">✨ Importar</button><button class="tab" data-tab="settings">⚙️ Configurações</button></nav>
+ <div id="planner-bar" class="planner-bar hidden">
+  <select id="planner-select" aria-label="Planner atual"></select>
+  <span id="role-badge" class="role-badge"></span>
+  <button id="new-planner" class="secondary">＋ Novo planner</button>
+ </div>
+ <div id="planner-banner" class="banner hidden"></div>
+ <div id="view-empty" class="view card empty-state hidden">
+  <h2>Você ainda não tem um planner</h2>
+  <p class="muted">Peça ao administrador para liberar o seu acesso a um planner existente ou crie o seu próprio planner.</p>
+  <div class="actions" style="justify-content:center"><button id="new-planner-2">＋ Criar meu planner</button></div>
+ </div>
+ <div id="planner-area" class="hidden">
+ <nav class="tabs" id="tabs"><button class="tab active" data-tab="home">🏠 Início</button><button class="tab" data-tab="records">📋 Registros</button><button class="tab" data-tab="import" id="tab-import">✨ Importar</button><button class="tab hidden" data-tab="users" id="tab-users">👥 Usuários</button><button class="tab" data-tab="settings">⚙️ Configurações</button></nav>
  <div id="view-home" class="view">
- <div class="stats"><div class="stat"><strong id="stat-week">0</strong><span>Provas nesta semana</span></div><div class="stat"><strong id="stat-next">—</strong><span id="stat-next-sub">Próxima prova</span></div><div class="stat"><strong id="stat-subjects">0</strong><span>Disciplinas cadastradas</span></div></div>
-
- <div class="layout">
-  <section class="card weekpanel">
-   <div class="weekhead"><h2>Planner semanal</h2><div class="actions"><button id="prev-week" class="secondary">‹</button><button id="today-week" class="secondary">Hoje</button><button id="next-week" class="secondary">›</button></div></div>
-   <p id="week-label" class="muted small"></p>
-   <div id="week-grid" class="weekgrid"></div>
-   <div class="footer">Toque em um dia para ver as provas e conteúdos daquela data.</div>
-  </section>
-  <aside class="card">
-   <div class="weekhead"><h2 id="selected-title">Agenda do dia</h2><button id="add-item">＋ Cadastrar</button></div>
-   <div id="day-list"><p class="muted">Selecione um dia no planner.</p></div>
+  <div class="stats"><div class="stat"><strong id="stat-week">0</strong><span>Provas nesta semana</span></div><div class="stat"><strong id="stat-next">—</strong><span id="stat-next-sub">Próxima prova</span></div><div class="stat"><strong id="stat-subjects">0</strong><span>Disciplinas cadastradas</span></div></div>
+  <div class="layout">
+   <section class="card weekpanel">
+    <div class="weekhead"><h2>Planner semanal</h2><div class="actions"><button id="prev-week" class="secondary">‹</button><button id="today-week" class="secondary">Hoje</button><button id="next-week" class="secondary">›</button></div></div>
+    <p id="week-label" class="muted small"></p>
+    <div id="week-grid" class="weekgrid"></div>
+    <div class="footer">Toque em um dia para ver as provas e conteúdos daquela data.</div>
+   </section>
+   <aside class="card">
+    <div class="weekhead"><h2 id="selected-title">Agenda do dia</h2><button id="add-item">＋ Cadastrar</button></div>
+    <div id="day-list"><p class="muted">Selecione um dia no planner.</p></div>
    </aside>
- </div></div>
- <div id="view-records" class="view hidden"><div class="actions" style="margin-bottom:12px"><button id="add-item-2">＋ Cadastrar prova</button></div><section class="card"><div class="weekhead"><div><h2 style="margin:0">Todos os próximos registros</h2><p class="muted small" style="margin:4px 0">Lista familiar, sincronizada pelo Supabase.</p></div><label class="small muted"><input type="checkbox" id="show-past"> Mostrar passadas</label> <select id="filter-subject" style="border:1px solid #d8deea;border-radius:9px;padding:8px"><option value="">Todas as disciplinas</option></select></div><div id="all-list"></div></section></div>
+  </div>
+ </div>
+ <div id="view-records" class="view hidden"><div class="actions" style="margin-bottom:12px"><button id="add-item-2">＋ Cadastrar prova</button></div><section class="card"><div class="weekhead"><div><h2 style="margin:0">Todos os próximos registros</h2><p class="muted small" style="margin:4px 0">Lista do planner selecionado, sincronizada pelo Supabase.</p></div><label class="small muted"><input type="checkbox" id="show-past"> Mostrar passadas</label> <select id="filter-subject" style="border:1px solid #d8deea;border-radius:9px;padding:8px"><option value="">Todas as disciplinas</option></select></div><div id="all-list"></div></section></div>
  <div id="view-import" class="view hidden"><section class="card"><h2 style="margin:0 0 8px">Importar calendário/roteiro</h2>
-   <p class="muted small">Envie PDF, foto ou imagem com datas de provas e conteúdos. A IA tentará organizar os registros; revise antes de salvar.</p>
-   <div class="importbox">
-    <div class="field"><label for="import-file">Arquivo PDF ou foto</label><input id="import-file" type="file" accept="application/pdf,image/*"></div>
-    <div class="actions"><button id="ai-import">✨ Ler com IA</button><button id="save-import" class="secondary hidden">Salvar registros</button></div>
-    <div id="import-status" class="small muted" style="margin-top:8px"></div>
-   </div>
-   <div id="import-preview"></div>
-  </section></div>
- <div id="view-settings" class="view hidden"><section class="card" id="backup-panel">
-  <div class="weekhead"><div><h2 style="margin:0">Backup e restauração</h2><p class="muted small" style="margin:4px 0">Exporte seus dados para um arquivo JSON ou restaure um backup anterior.</p></div><span class="pill">JSON</span></div>
-  <div class="actions" style="margin-top:12px"><button id="export-json">⬇ Exportar JSON</button><button id="import-json-trigger" class="secondary">⬆ Importar JSON</button><input id="import-json-file" type="file" accept=".json,application/json" class="hidden"></div>
-  <div id="json-status" class="small muted" style="margin-top:9px">O backup inclui os registros de provas e conteúdos disponíveis para sua conta. Guarde o arquivo em local seguro.</div>
+  <p class="muted small">Envie PDF, foto ou imagem com datas de provas e conteúdos. A IA tentará organizar os registros; revise antes de salvar.</p>
+  <div class="importbox">
+   <div class="field"><label for="import-file">Arquivo PDF ou foto</label><input id="import-file" type="file" accept="application/pdf,image/*"></div>
+   <div class="actions"><button id="ai-import">✨ Ler com IA</button><button id="save-import" class="secondary hidden">Salvar registros</button></div>
+   <div id="import-status" class="small muted" style="margin-top:8px"></div>
+  </div>
+  <div id="import-preview"></div>
  </section></div>
+ <div id="view-users" class="view hidden">
+  <section class="card" id="users-manage">
+   <div class="weekhead"><div><h2 style="margin:0">Usuários do planner</h2><p id="users-planner-name" class="muted small" style="margin:4px 0"></p></div><span class="pill" id="users-kind"></span></div>
+   <div class="actions" style="margin:8px 0"><button id="rename-planner" class="secondary">✎ Renomear</button><button id="delete-planner" class="danger hidden">🗑 Excluir planner</button></div>
+   <div id="members-list"><p class="muted small">Carregando...</p></div>
+   <form id="invite-form" class="invite-form">
+    <div class="field"><label for="invite-email">Dar acesso por e-mail</label><input id="invite-email" type="email" required placeholder="pessoa@exemplo.com"></div>
+    <div class="field" style="flex:0 1 150px"><label for="invite-role">Permissão</label><select id="invite-role"></select></div>
+    <button type="submit">Dar acesso</button>
+   </form>
+   <p class="small muted" style="margin:8px 0 0">Se a pessoa ainda não tem conta, o acesso fica como convite pendente e é liberado automaticamente no primeiro login com esse e-mail.</p>
+  </section>
+  <section class="card hidden" id="users-overview" style="margin-top:12px">
+   <h2 style="margin:0 0 4px">Todos os planners (administrador geral)</h2>
+   <p class="muted small" style="margin:0 0 6px">Você tem acesso total a todos os planners do sistema.</p>
+   <div id="overview-list"></div>
+  </section>
+ </div>
+ <div id="view-settings" class="view hidden"><section class="card" id="backup-panel">
+  <div class="weekhead"><div><h2 style="margin:0">Backup e restauração</h2><p class="muted small" style="margin:4px 0">Exporte os dados do planner selecionado para um arquivo JSON ou restaure um backup anterior.</p></div><span class="pill">JSON</span></div>
+  <div class="actions" style="margin-top:12px"><button id="export-json">⬇ Exportar JSON</button><button id="import-json-trigger" class="secondary">⬆ Importar JSON</button><input id="import-json-file" type="file" accept=".json,application/json" class="hidden"></div>
+  <div id="json-status" class="small muted" style="margin-top:9px">O backup inclui os registros de provas e conteúdos do planner selecionado. Guarde o arquivo em local seguro.</div>
+ </section></div>
+ </div>
  <div class="footer">Planner Escolar Familiar <span id="version"></span> · Supabase Auth + banco compartilhado</div>
 </main>
 </div>
@@ -148,78 +103,22 @@ button.secondary{background:#eef1f8;color:#283149}
  <div class="weekhead"><h2 id="detail-title">Prova</h2><button id="close-detail" class="secondary">✕</button></div>
  <div id="detail-body"></div>
 </div></div>
+<div id="plannermodal" class="modalback hidden"><div class="modal">
+ <div class="weekhead"><h2>Novo planner</h2><button id="close-planner-modal" class="secondary">✕</button></div>
+ <form id="planner-form">
+  <div class="field"><label for="planner-name">Nome do planner</label><input id="planner-name" required minlength="2" maxlength="80" placeholder="Ex.: Provas do Pedro"></div>
+  <p class="small muted">Você será o administrador deste planner e decide quem pode ler ou editar. Ele é separado do planner Marista.</p>
+  <div class="actions"><button type="submit">Criar planner</button><button type="button" id="cancel-planner-modal" class="secondary">Cancelar</button></div>
+ </form>
+</div></div>
 <div id="toast" class="toast hidden"></div>
-<script>
-(() => {
-'use strict';
-const APP_VERSION='v1.1.0';
-document.getElementById('version').textContent=APP_VERSION;
-document.getElementById('version-top').textContent='APP '+APP_VERSION;
-if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-const $=s=>document.querySelector(s);
-const cfg=window.NUTRI_SUPABASE_CONFIG||window.SUPABASE_CONFIG||{};
-const supabaseConfig={url:cfg.url||'https://ytsabhbkywymtevkeokg.supabase.co',key:cfg.key||cfg.anonKey||'sb_publishable_cyIolmmdF5zKN0rAOJQOXg_ECcSq7z6'};
-let sb=null,user=null,records=[],selectedDate=iso(new Date()),weekAnchor=startWeek(new Date()),pendingImport=[];
-function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function startWeek(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
-function plusDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
-function fmt(s,opts={day:'2-digit',month:'2-digit',year:'numeric'}){if(!s)return '—';return new Date(s+'T12:00:00').toLocaleDateString('pt-BR',opts)}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function dias(d){const n=Math.round((new Date(d+'T12:00:00')-new Date(iso(new Date())+'T12:00:00'))/864e5);return n<0?`atrasada há ${-n} d`:n===0?'hoje':n===1?'amanhã':`em ${n} dias`}
-function subjColor(t){let h=0;for(const c of String(t).trim().toLowerCase())h=(h*31+c.charCodeAt(0))%360;return h}
-function isDup(x){const k=r=>[r.exam_date,String(r.subject).trim().toLowerCase(),String(r.title).trim().toLowerCase()].join('|');return records.some(r=>k(r)===k(x))}
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),3500)}
-function showAuth(msg){$('#auth-view').classList.remove('hidden');$('#app-view').classList.add('hidden');$('#logout').classList.add('hidden');$('#user-label').textContent='';if(msg)$('#auth-msg').textContent=msg}
-function showApp(){ $('#auth-view').classList.add('hidden');$('#app-view').classList.remove('hidden');$('#logout').classList.remove('hidden');$('#user-label').textContent=user?.email||''}
-function initClient(){if(!window.supabase||!supabaseConfig.url||!supabaseConfig.key)throw Error('Não encontrei a configuração do Supabase. Confira supabase-config.js.');sb=window.supabase.createClient(supabaseConfig.url,supabaseConfig.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}
-async function loadRecords(){const {data,error}=await sb.from('school_planner_items').select('*').order('exam_date',{ascending:true});if(error)throw error;records=data||[];render()}
-async function refresh(){try{await loadRecords()}catch(e){toast('Erro ao carregar dados: '+e.message)}}
-function render(){renderWeek();renderDay();renderAll();renderStats();renderFilters();if(detailId&&!$('#detailback').classList.contains('hidden'))openDetail(detailId)}
-function renderWeek(){const grid=$('#week-grid');grid.innerHTML='';const end=plusDays(weekAnchor,6);$('#week-label').textContent=`${fmt(iso(weekAnchor),{day:'2-digit',month:'long'})} – ${fmt(iso(end),{day:'2-digit',month:'long',year:'numeric'})}`;
-const today=iso(new Date());for(let i=0;i<7;i++){const d=plusDays(weekAnchor,i),key=iso(d),items=records.filter(r=>r.exam_date===key);const el=document.createElement('div');el.className='day'+(key===today?' today':'')+(key===selectedDate?' selected':'');el.innerHTML=`<div class="dayname">${d.toLocaleDateString('pt-BR',{weekday:'short'})}</div><div class="daynum">${d.getDate()}</div><div class="dayev">${items.map(r=>`<div class="event" data-open="${esc(r.id)}" style="--h:${subjColor(r.subject)}"><b>${r.status==='Estudado'||r.status==='Realizada'?'✓ ':''}${r.priority==='alta'?'❗':''}${esc(r.subject)}</b></div>`).join('')}</div>`;el.tabIndex=0;el.setAttribute('role','button');el.onclick=()=>{selectedDate=key;render()};el.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();el.onclick()}};el.querySelectorAll('[data-open]').forEach(c=>c.onclick=e=>{e.stopPropagation();openDetail(c.dataset.open)});grid.appendChild(el)}}
-function itemMarkup(r){const done=r.status==='Estudado'||r.status==='Realizada',late=r.exam_date<iso(new Date())&&!done;return `<article class="item"><div class="itemtop"><div class="item-heading"><h3>${esc(r.title)}</h3><span class="subject" style="--h:${subjColor(r.subject)}">${esc(r.subject)}</span> <span class="pill">${esc(r.status||'A estudar')}</span><div class="item-meta">${fmt(r.exam_date)} · <span class="${late?'late':''}">${dias(r.exam_date)}</span> · Prioridade ${esc(r.priority||'normal')}</div></div><button class="secondary edit-button" data-edit="${esc(r.id)}">Editar</button></div>${r.topics?`<p class="item-detail"><b>Conteúdos:</b> ${esc(r.topics).replace(/\n/g,'<br>')}</p>`:''}${r.study_notes?`<p class="item-detail plan-detail"><b>Plano:</b> ${esc(r.study_notes).replace(/\n/g,'<br>')}</p>`:''}<div class="quick">${!done?`<button class="secondary" data-quick="Estudado" data-id="${esc(r.id)}">✓ Estudado</button>`:''}${r.status!=='Realizada'?`<button class="secondary" data-quick="Realizada" data-id="${esc(r.id)}">Realizada</button>`:`<button class="secondary" data-quick="A estudar" data-id="${esc(r.id)}">Reabrir</button>`}</div></article>`}
-let detailId=null;
-function openDetail(id){const r=records.find(x=>x.id===id);if(!r)return;detailId=id;$('#detail-title').textContent=r.subject;$('#detail-body').innerHTML=itemMarkup(r);bindEdit();$('#detailback').classList.remove('hidden')}
-function closeDetail(){detailId=null;$('#detailback').classList.add('hidden')}
-$('#close-detail').onclick=closeDetail;$('#detailback').onclick=e=>{if(e.target.id==='detailback')closeDetail()};
-function setTab(t){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('hidden',v.id!=='view-'+t));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));history.replaceState(null,'','#'+t);window.scrollTo({top:0})}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
-function renderDay(){const list=records.filter(r=>r.exam_date===selectedDate).sort((a,b)=>a.subject.localeCompare(b.subject));$('#selected-title').textContent='Agenda · '+fmt(selectedDate,{weekday:'short',day:'2-digit',month:'short'});$('#day-list').innerHTML=list.length?list.map(itemMarkup).join(''):'<p class="muted small">Nenhuma prova cadastrada para este dia.</p>';bindEdit()}
-function renderAll(){const filter=$('#filter-subject').value;const now=iso(new Date());const arr=records.filter(r=>!filter||r.subject===filter).filter(r=>$('#show-past').checked||r.exam_date>=now).sort((a,b)=>a.exam_date.localeCompare(b.exam_date));$('#all-list').innerHTML=arr.length?arr.map(itemMarkup).join(''):'<p class="muted">Nenhuma prova futura cadastrada.</p>';bindEdit()}
-function bindEdit(){document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{closeDetail();openEdit(records.find(r=>r.id===b.dataset.edit))});document.querySelectorAll('[data-quick]').forEach(b=>b.onclick=async e=>{e.stopPropagation();const {error}=await sb.from('school_planner_items').update({status:b.dataset.quick,updated_at:new Date().toISOString(),updated_by:user.id}).eq('id',b.dataset.id);if(error)return toast('Erro: '+error.message);await refresh()})}
-function renderStats(){const wk=startWeek(new Date()),end=iso(plusDays(wk,6)),start=iso(wk),now=iso(new Date());$('#stat-week').textContent=records.filter(r=>r.exam_date>=start&&r.exam_date<=end&&r.status!=='Realizada').length;const next=records.filter(r=>r.exam_date>=now&&r.status!=='Realizada').sort((a,b)=>a.exam_date.localeCompare(b.exam_date))[0];$('#stat-next').textContent=next?fmt(next.exam_date,{day:'2-digit',month:'2-digit'}):'—';$('#stat-next-sub').textContent=next?next.subject+' · '+dias(next.exam_date):'Próxima prova';$('#stat-subjects').textContent=new Set(records.map(r=>r.subject.trim().toLowerCase()).filter(Boolean)).size}
-function renderFilters(){const old=$('#filter-subject').value,subs=[...new Set(records.map(r=>r.subject).filter(Boolean))].sort();$('#filter-subject').innerHTML='<option value="">Todas as disciplinas</option>'+subs.map(s=>`<option>${esc(s)}</option>`).join('');$('#filter-subject').value=subs.includes(old)?old:''}
-function openNew(date=selectedDate){$('#item-form').reset();$('#item-id').value='';$('#date').value=date;$('#status').value='A estudar';$('#modal-title').textContent='Cadastrar prova';$('#delete-item').classList.add('hidden');$('#modalback').classList.remove('hidden')}
-function openEdit(r){if(!r)return;$('#item-id').value=r.id;$('#subject').value=r.subject||'';$('#date').value=r.exam_date;$('#title').value=r.title||'';$('#status').value=r.status||'A estudar';$('#topics').value=r.topics||'';$('#study').value=r.study_notes||'';$('#color').value=r.priority||'normal';$('#modal-title').textContent='Editar prova';$('#delete-item').classList.remove('hidden');$('#modalback').classList.remove('hidden')}
-function closeModal(){$('#modalback').classList.add('hidden')}
-async function saveItem(e){e.preventDefault();const id=$('#item-id').value;const row={subject:$('#subject').value.trim(),exam_date:$('#date').value,title:$('#title').value.trim(),status:$('#status').value,topics:$('#topics').value.trim(),study_notes:$('#study').value.trim(),priority:$('#color').value,updated_at:new Date().toISOString(),updated_by:user.id};if(!row.subject||!row.exam_date||!row.title)return;try{const res=id?await sb.from('school_planner_items').update(row).eq('id',id).select():await sb.from('school_planner_items').insert({...row,created_by:user.id}).select();if(res.error)throw res.error;selectedDate=row.exam_date;closeModal();await refresh();toast('Registro salvo e sincronizado.')}catch(e){toast('Não foi possível salvar: '+e.message)}}
-async function deleteItem(){const id=$('#item-id').value;if(!id||!confirm('Excluir este registro para todos os usuários familiares?'))return;try{const {error}=await sb.from('school_planner_items').delete().eq('id',id);if(error)throw error;closeModal();await refresh();toast('Registro excluído.')}catch(e){toast('Erro ao excluir: '+e.message)}}
-async function extractPdf(file){const buf=await file.arrayBuffer(),pdf=await pdfjsLib.getDocument({data:buf}).promise;let out='';for(let i=1;i<=pdf.numPages;i++){const p=await pdf.getPage(i),c=await p.getTextContent();out+='--- Página '+i+' ---\n'+c.items.map(x=>x.str+(x.hasEOL?'\n':' ')).join('')+'\n'}return out.trim()}
-function dataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=reject;r.readAsDataURL(file)})}
-async function readImport(){const file=$('#import-file').files[0];if(!file){toast('Selecione um PDF ou uma foto primeiro.');return}if(!user){toast('Entre na sua conta para usar a IA.');return}const btn=$('#ai-import');btn.disabled=true;$('#import-status').textContent='Lendo o arquivo e organizando as informações com IA...';$('#import-preview').innerHTML='';pendingImport=[];try{let parts=[];if(file.type==='application/pdf'){const text=await extractPdf(file);if(!text)throw Error('O PDF não contém texto selecionável. Para PDF digitalizado, envie fotos das páginas.');if(text.length>95000)throw Error(`O PDF contém ${text.length.toLocaleString('pt-BR')} caracteres. O limite atual por envio é 100.000; este documento precisa ser dividido em partes. Por enquanto, use um PDF menor ou separado por capítulos.`);parts.push({text:'Extraia datas de provas e conteúdos deste documento. Texto do PDF:\n'+text})}else if(file.type.startsWith('image/')){if(file.size>12*1024*1024)throw Error('A imagem deve ter no máximo 12 MB.');parts.push({inlineData:{mimeType:file.type,data:await dataURL(file)}});parts.push({text:'Leia esta foto e extraia todas as provas/avaliações, datas e conteúdos.'})}else throw Error('Formato não suportado. Use PDF, JPG, PNG ou WEBP.');
-const systemInstruction='Hoje é '+iso(new Date())+'. Você organiza calendários escolares brasileiros. Responda somente JSON válido com a estrutura {"items":[{"subject":"disciplina","exam_date":"AAAA-MM-DD","title":"nome da prova","topics":"conteúdos","study_notes":"observações","priority":"normal|alta|baixa"}]}. Não invente datas. Use ano explícito no documento; se não houver ano, use o ano atual apenas quando isso for inequívoco, caso contrário omita o registro e explique em study_notes. Ignore registros sem data identificável. Datas em formato brasileiro DD/MM/AAAA. Conteúdos podem ser texto resumido fiel ao documento.';
-const payload={modo:file.type==='application/pdf'?'edital':'agenda',systemInstruction:{parts:[{text:systemInstruction}]},contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{items:{type:'ARRAY',items:{type:'OBJECT',properties:{subject:{type:'STRING'},exam_date:{type:'STRING'},title:{type:'STRING'},topics:{type:'STRING'},study_notes:{type:'STRING'},priority:{type:'STRING'}},required:['subject','exam_date','title','topics','study_notes','priority']}}},required:['items']},temperature:0.1,maxOutputTokens:5000}};
-const {data:sd,error:se}=await sb.auth.getSession();const token=sd?.session?.access_token;if(se||!token)throw Error('Sessão expirada. Entre novamente.');
-const resp=await fetch(supabaseConfig.url.replace(/\/$/,'')+'/functions/v1/dynamic-service',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':supabaseConfig.key},body:JSON.stringify(payload)});
-if(!resp.ok){let msg='Serviço de IA retornou HTTP '+resp.status;try{const b=await resp.json();msg=b.error||b.message||msg}catch{}throw Error(msg)}
-const data=await resp.json(),txt=data?.candidates?.[0]?.content?.parts?.find(p=>typeof p.text==='string')?.text;if(!txt)throw Error('A IA retornou resposta vazia.');const parsed=JSON.parse(txt.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim());pendingImport=(parsed.items||[]).map(x=>({...x,exam_date:normalizeDate(x.exam_date),priority:['alta','baixa','normal'].includes(x.priority)?x.priority:'normal'})).filter(x=>x.subject&&x.exam_date&&/^\d{4}-\d{2}-\d{2}$/.test(x.exam_date)&&x.title);if(!pendingImport.length)throw Error('Não encontrei provas com datas válidas. Confira se o arquivo contém datas.');$('#import-status').textContent=`A IA encontrou ${pendingImport.length} registro(s). Revise a prévia antes de salvar.`;$('#import-preview').innerHTML=pendingImport.map((x,i)=>`<div class="item"><b>${esc(x.exam_date)} · ${esc(x.subject)}</b><div>${esc(x.title)}</div><div class="small muted">${esc(x.topics||'Sem conteúdo identificado')}</div><button class="secondary" data-drop-import="${i}" style="margin-top:6px">Remover da importação</button></div>`).join('');document.querySelectorAll('[data-drop-import]').forEach(b=>b.onclick=()=>{pendingImport.splice(Number(b.dataset.dropImport),1);renderImportPreview()});$('#save-import').classList.remove('hidden');}catch(e){$('#import-status').textContent=e.message;toast(e.message)}finally{btn.disabled=false}}
-function normalizeDate(v){if(!v)return '';let s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;const m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);if(m)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;return ''}
-function renderImportPreview(){$('#import-status').textContent=`${pendingImport.length} registro(s) prontos para salvar.`;$('#import-preview').innerHTML=pendingImport.map((x,i)=>`<div class="item"><b>${esc(x.exam_date)} · ${esc(x.subject)}</b><div>${esc(x.title)}</div><div class="small muted">${esc(x.topics||'Sem conteúdo identificado')}</div><button class="secondary" data-drop-import="${i}" style="margin-top:6px">Remover da importação</button></div>`).join('');document.querySelectorAll('[data-drop-import]').forEach(b=>b.onclick=()=>{pendingImport.splice(Number(b.dataset.dropImport),1);renderImportPreview()});$('#save-import').classList.toggle('hidden',!pendingImport.length)}
-async function saveImport(){if(!pendingImport.length)return;try{const rows=pendingImport.map(x=>({subject:x.subject.trim(),exam_date:x.exam_date,title:x.title.trim(),topics:x.topics||'',study_notes:x.study_notes||'',priority:x.priority||'normal',status:'A estudar',created_by:user.id,updated_by:user.id}));const nov=rows.filter(x=>!isDup(x));if(!nov.length){toast('Todos esses registros já existem no planner.');return}const {error}=await sb.from('school_planner_items').insert(nov);if(error)throw error;selectedDate=nov[0].exam_date;pendingImport=[];$('#import-preview').innerHTML='';$('#import-status').textContent='Importação salva com sucesso.';$('#save-import').classList.add('hidden');await refresh();toast('Registros importados e compartilhados com a família.'+(nov.length<rows.length?` (${rows.length-nov.length} duplicado(s) ignorado(s))`:''))}catch(e){toast('Erro ao salvar importação: '+e.message)}}
-$('#login').onclick=async()=>{try{const {data,error}=await sb.auth.signInWithPassword({email:$('#email').value.trim(),password:$('#password').value});if(error)throw error;user=data.user;showApp();await refresh()}catch(e){$('#auth-msg').textContent=e.message}};
-$('#signup').onclick=async()=>{try{const {data,error}=await sb.auth.signUp({email:$('#email').value.trim(),password:$('#password').value});if(error)throw error;$('#auth-msg').textContent=data.session?'Conta criada. Você já pode usar o planner.':'Conta criada. Confira o e-mail para confirmar o cadastro e depois entre.'}catch(e){$('#auth-msg').textContent=e.message}};
-$('#password').onkeydown=e=>{if(e.key==='Enter')$('#login').click()};
-$('#forgot').onclick=async()=>{const em=$('#email').value.trim();if(!em){$('#auth-msg').textContent='Digite seu e-mail acima e toque em "Esqueci a senha".';return}const {error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.href.split('#')[0]});$('#auth-msg').textContent=error?error.message:'Enviamos um link para redefinir a senha. Confira seu e-mail.'};
-$('#logout').onclick=async()=>{await sb.auth.signOut();user=null;showAuth('Você saiu da conta.')};
-$('#add-item').onclick=()=>openNew(selectedDate);$('#close-modal').onclick=closeModal;$('#cancel-modal').onclick=closeModal;$('#item-form').onsubmit=saveItem;$('#delete-item').onclick=deleteItem;
-$('#prev-week').onclick=()=>{weekAnchor=plusDays(weekAnchor,-7);render()};$('#next-week').onclick=()=>{weekAnchor=plusDays(weekAnchor,7);render()};$('#today-week').onclick=()=>{weekAnchor=startWeek(new Date());selectedDate=iso(new Date());render()};$('#filter-subject').onchange=renderAll;$('#show-past').onchange=renderAll;$('#add-item-2').onclick=()=>$('#add-item').click();$('#ai-import').onclick=readImport;$('#save-import').onclick=saveImport;
-$('#export-json').onclick=()=>{try{const payload={app:'Planner Escolar Familiar',version:APP_VERSION,exported_at:new Date().toISOString(),format:'planner-escolar-familiar-json-v1',items:records.map(r=>({subject:r.subject,exam_date:r.exam_date,title:r.title,topics:r.topics||'',study_notes:r.study_notes||'',status:r.status||'A estudar',priority:r.priority||'normal'}))};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='planner-escolar-backup-'+iso(new Date())+'.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);$('#json-status').textContent=`Backup exportado: ${payload.items.length} registro(s).`;toast('Backup JSON exportado.')}catch(e){$('#json-status').textContent='Falha ao exportar: '+e.message}};
-$('#import-json-trigger').onclick=()=>$('#import-json-file').click();
-$('#import-json-file').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const parsed=JSON.parse(await file.text());const list=Array.isArray(parsed)?parsed:parsed.items;if(!Array.isArray(list))throw Error('O JSON precisa conter uma lista "items" ou ser uma lista de registros.');const clean=list.map((x,i)=>{const date=normalizeDate(x.exam_date||x.data||x.date);const subject=String(x.subject||x.disciplina||'').trim();const title=String(x.title||x.titulo||x.prova||'').trim();if(!subject||!date||!title)throw Error(`Registro ${i+1}: disciplina, data e título são obrigatórios ou estão inválidos.`);return {subject,exam_date:date,title,topics:String(x.topics||x.conteudos||x['conteúdos']||''),study_notes:String(x.study_notes||x.observacoes||x['observações']||''),status:['A estudar','Revisando','Estudado','Realizada'].includes(x.status)?x.status:'A estudar',priority:['normal','alta','baixa'].includes(x.priority)?x.priority:'normal',created_by:user.id,updated_by:user.id}});if(!clean.length)throw Error('O arquivo não contém registros para importar.');if(!confirm(`Foram encontrados ${clean.length} registro(s).\n\nOK = adicionar ao planner.\nCancelar = não importar.`))return;const nov=clean.filter(x=>!isDup(x));if(!nov.length)throw Error('Todos os registros do arquivo já existem no planner.');const {error}=await sb.from('school_planner_items').insert(nov);if(error)throw error;$('#json-status').textContent=`Importação concluída: ${nov.length} registro(s) adicionados.`;await refresh();toast('Backup JSON importado com sucesso.')}catch(err){$('#json-status').textContent='Não foi possível importar: '+err.message;toast('Erro no JSON: '+err.message)}finally{e.target.value=''}};
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&user)refresh()});
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
-try{const h=location.hash.slice(1);if(['home','records','import','settings'].includes(h))setTab(h)}catch(e){}
-try{initClient();sb.auth.onAuthStateChange((_event,session)=>{if(_event==='PASSWORD_RECOVERY'){const np=prompt('Digite a nova senha (mínimo 6 caracteres):');if(np&&np.length>=6)sb.auth.updateUser({password:np}).then(({error})=>toast(error?error.message:'Senha atualizada.'))}if(session?.user){user=session.user;showApp();refresh()}else{user=null;showAuth()}});sb.auth.getSession().then(({data})=>{if(data.session?.user){user=data.session.user;showApp();refresh()}else showAuth()})}catch(e){showAuth(e.message)}
-})();
-</script>
-</body></html>
+<script src="js/00-config.js"></script>
+<script src="js/01-base.js"></script>
+<script src="js/02-planners.js"></script>
+<script src="js/03-registros.js"></script>
+<script src="js/04-importar.js"></script>
+<script src="js/05-usuarios.js"></script>
+<script src="js/06-auth.js"></script>
+<script src="js/07-iniciar.js"></script>
+</body>
+</html>

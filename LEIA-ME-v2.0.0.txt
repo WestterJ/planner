@@ -1,0 +1,22 @@
+Planner Escolar Familiar v2.0.0 — módulo de usuários e planners
+
+O que mudou
+- Vários planners: o Marista (os dados atuais) e planners genéricos que cada usuário pode criar.
+- Permissão por usuário e por planner: Leitor, Editor ou Admin (Admin só em planner genérico). Dá para pausar o acesso sem remover.
+- Administrador geral (você): acesso total a todos os planners, inclusive os genéricos de outros usuários, com aviso na tela.
+- Convite por e-mail: se a pessoa ainda não tem conta, o acesso é liberado no primeiro login com aquele e-mail.
+- Quem não é membro do Marista não vê esse planner. Antes, qualquer conta logada no projeto via tudo.
+- Código separado em css/ e js/ (veja ARQUITETURA.md) e script de verificação.
+
+Como publicar (nesta ordem, na mesma sessão)
+1. No Supabase > SQL Editor: abra schema_v2.sql, troque 'SEU_EMAIL_AQUI' (bloco 3) pelo e-mail da sua conta e execute.
+   Se o e-mail estiver errado, nada é alterado e o erro explica.
+2. Confira com as consultas que estão no fim do arquivo (sem_planner deve ser 0).
+3. Suba para o GitHub: index.html, sw.js, css/, js/, scripts/, ARQUITETURA.md, schema_v2.sql, LEIA-ME-v2.0.0.txt.
+   Mantenha manifest.webmanifest, os ícones e o supabase-config.js. Pode apagar schema.sql e README.txt antigos.
+4. Abra o app, entre com sua conta e vá em Usuários para conferir quem entrou como Editor no Marista.
+
+Observações
+- Entre o passo 1 e o passo 3 o app antigo não consegue gravar provas (elas passam a exigir um planner).
+- A função dynamic-service (IA) não foi alterada; o app só deixa importar quem é Editor/Admin do planner.
+- Planners genéricos: limite de 5 por usuário; excluir exige digitar o nome do planner.
